@@ -1,0 +1,6 @@
+<div class="contents row">
+  <p><%= @nickname %>さんのぼやき一覧</p>
+  <% @tweets.each do |tweet| %>
+    <%= render partial: "tweets/tweet", locals: { tweet: tweet } %>
+  <% end %>
+</div>
