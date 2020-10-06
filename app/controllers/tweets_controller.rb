@@ -1,6 +1,6 @@
 class TweetsController < ApplicationController
-  before_action :authenticate_user!, only: [:edit, :show]
   before_action :set_tweet, only: [:edit, :show]
+  before_action :move_to_index, only: [:index, :show, :search]
 
 
   def index
@@ -33,6 +33,10 @@ class TweetsController < ApplicationController
     tweet.update(tweet_params)
   end
 
+  def search
+    @tweets = Tweet.search(params[:keyword])
+  end
+
 private
 
   def set_tweet
@@ -40,7 +44,12 @@ private
   end
 
   def tweet_params
-    params.require(:tweet).permit(:text).merge(user_id: current_user.id)
+    params.require(:tweet).permit(:content).merge(user_id: current_user.id)
   end
 
+  def move_to_index
+    unless user_signed_in?
+      redirect_to root_path
+    end
+  end
 end
